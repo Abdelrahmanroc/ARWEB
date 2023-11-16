@@ -1,12 +1,15 @@
 <?php 
+// Inclusie van de databaseverbinding
  include 'components/connection.php';
+ // Start van de sessie voor gebruikersinformatie
  session_start();
+ // Controleer of de gebruiker is ingelogd en wijs $user_id toe
  if (isset($_SESSION['user_id'])) {
 		$user_id = $_SESSION['user_id'];
 	}else{
 		$user_id = '';
 	}
-
+// Uitloggen als de 'logout' knop wordt ingedrukt
 	if (isset($_POST['logout'])) {
 		session_destroy();
 		header("location: login.php");
@@ -30,6 +33,7 @@
 		<section class="home-section">
 			<div class="slider">
 				<div class="slider__slider slide1">
+					<!-- Slidersectie met verschillende dia's -->
 					<div class="overlay"></div>
 					<div class="slide-detail">
 						<!-- <h1>The pinnacle of imagination and magic</h1>
@@ -90,6 +94,7 @@
 		</section>
 		<!-- home slider end -->
 		<section class="thumb">
+			<!-- Deze foto's geven een indruk van de producten die deze site aanbiedt . -->
 			<div class="box-container">
 				<div class="box">
 					<img src="img/ns1.png">
@@ -122,6 +127,7 @@
 				<div class="box">
 					<img src="img/flash-sale 2.png">
 				</div>
+				<!-- Beste offer die deze website aanbied voor labtops en Smartphons . -->
 				<div class="box">
 					<img src="img/ns2.png">
 					<span>Best Offer for gaming laptops</span>
@@ -144,6 +150,7 @@
 					</div>
 				</div>
 			</div>
+			<!-- Deze foto's geven een indruk van de producten die deze site aanbiedt . -->
 			<div class="box-container">
 				<div class="box">
 					<img src="img/maxx.jpg">
@@ -174,6 +181,7 @@
 		<section class="shop-category">
 			<div class="box-container">
 				<div class="box">
+					<!-- Servise section . -->
 					<img src="img/chara3.jpg">
 					<div class="detail">
 						<span>BIG OFFERS</span>
@@ -223,6 +231,7 @@
 				</div>
 			</div>
 		</section>
+		<!--Logo van de producten die wij verkopen -->
 		<section class="brand">
 			<div class="box-container">
 				<div class="box">
