@@ -1,12 +1,14 @@
-<?php 
+<?php
+// Inclusie van de databaseverbinding en start van de sessie. 
  include 'components/connection.php';
  session_start();
+ // Controleert of de gebruiker is ingelogd en haalt de gebruikers-ID op.
  if (isset($_SESSION['user_id'])) {
 		$user_id = $_SESSION['user_id'];
 	}else{
 		$user_id = '';
 	}
-
+// Uitlogfunctionaliteit: vernietigt de sessie bij het indienen van het uitlogformulier en leidt door naar het inlogscherm.
 	if (isset($_POST['logout'])) {
 		session_destroy();
 		header("location: login.php");
@@ -25,6 +27,7 @@
 </head>
 <body>
 	<?php include 'components/header.php'; ?>
+	<!-- Hoofdinhoud van de pagina, inclusief banner, navigatie en informatie over ons. -->
 	<div class="main">
 		<div class="banner">
 			<h1>about us</h1>
@@ -32,6 +35,7 @@
 		<div class="title2">
 			<a href="home.php">home </a><span>/ about</span>
 		</div>
+		<!-- Categorieën en bijbehorende producten met shop now-knoppen. -->
 		<div class="about-category">
 			<div class="box">
 				<img src="image/2k.jpg">
@@ -44,28 +48,23 @@
 			<div class="box">
 				<img src="image/iphone 15rpo max.png">
 				<div class="detail">
-					<!-- <span>coffee</span>
-					<h1>lemon Teaname</h1> -->
 					<a href="view_products.php" class="btn">shop now</a>
 				</div>
 			</div>
 			<div class="box">
 				<img src="image/SAMSUNG Galaxy Buds2 Pro Grijs.png">
 				<div class="detail">
-					<!-- <span>coffee</span>
-					<h1>lemon Teaname</h1> -->
 					<a href="view_products.php" class="btn">shop now</a>
 				</div>
 			</div>
 			<div class="box">
 				<img src="image/APPLE AirPods 3e generatie Lightning Charging (2022).jpg">
 				<div class="detail">
-					<!-- <span>coffee</span>
-					<h1>lemon green</h1> -->
 					<a href="view_products.php" class="btn">shop now</a>
 				</div>
 			</div>
 		</div>
+		<!-- Sectie met verschillende services, elk weergegeven als een doos met pictogram en details. -->
 		<section class="services">
 			<div class="box-container">
 				<div class="box">
@@ -103,6 +102,7 @@
 				<div class="img-box">
 					<img src="img/ezgif.com-webp-to-png.png">
 				</div>
+				<!-- Informatie over AR Mobile Webshop, inclusief afbeelding en beschrijving. -->
 				<div class="detail">
     		<h1>AR Mobile Webshop - Your Gateway to the Ultimate Tech Experience!</h1>
     		<p>Welcome to AR Mobile Webshop, your one-stop destination for the latest in technology and innovation.</p>
@@ -120,9 +120,7 @@
 			<div class="title">
 				<img src="img/ddd3.png" class="logo">
 				<h1>what people say about us</h1>
-				<!-- <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto dolorum deserunt minus veniam
-                    tenetur
-                </p> -->
+				<!-- Container voor testimonials van klanten met bijbehorende afbeeldingen en opmerkingen. -->
             </div>
                 <div class="container">
                 	<div class="testimonial-item active">
@@ -151,6 +149,7 @@
 		</div>
 		<?php include 'components/footer.php'; ?>
 	</div>
+	<!-- Inclusie van SweetAlert2-bibliotheek en aangepaste scripts. -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 	<script src="script.js"></script>
 	<script type="text/javascript">
