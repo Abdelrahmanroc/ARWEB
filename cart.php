@@ -1,18 +1,20 @@
-<?php 
+<?php
+// Inclusie van de databaseverbinding en start van de sessie. 
  include 'components/connection.php';
  session_start();
+ // Controleert of de gebruiker is ingelogd en haalt de gebruikers-ID op.
  if (isset($_SESSION['user_id'])) {
 		$user_id = $_SESSION['user_id'];
 	}else{
 		$user_id = '';
 	}
-
+// Uitlogfunctionaliteit: vernietigt de sessie bij het indienen van het uitlogformulier en leidt door naar het inlogscherm.
 	if (isset($_POST['logout'])) {
 		session_destroy();
 		header("location: login.php");
 	}
 	//update product in cart
-
+// Bijwerken van de producthoeveelheid in de winkelwagen.
 	if (isset($_POST['update_cart'])) {
 		$cart_id = $_POST['cart_id'];
 		$cart_id = filter_var($cart_id, FILTER_SANITIZE_STRING);
@@ -31,6 +33,7 @@
 		$cart_id = $_POST['cart_id'];
 		$cart_id = filter_var($cart_id, FILTER_SANITIZE_STRING);
 
+// Controleert of het te verwijderen item daadwerkelijk bestaat in de winkelwagen.
 		$varify_delete_items = $conn->prepare("SELECT * FROM `cart` WHERE id =?");
 		$varify_delete_items->execute([$cart_id]);
 
@@ -47,7 +50,7 @@
 	if (isset($_POST['empty_cart'])) {
 		$varify_empty_item = $conn->prepare("SELECT * FROM `cart` WHERE user_id=?");
 		$varify_empty_item->execute([$user_id]);
-
+// Controleert of er items in de winkelwagen zijn.
 		if ($varify_empty_item->rowCount() > 0) {
 			$delete_cart_id = $conn->prepare("DELETE FROM `cart` WHERE user_id = ?");
 			$delete_cart_id->execute([$user_id]);
@@ -71,6 +74,7 @@
 </head>
 <body>
 	<?php include 'components/header.php'; ?>
+	<!-- Hoofdinhoud van de pagina, inclusief banner, navigatie en winkelwageninhoud. -->
 	<div class="main">
 		<div class="banner">
 			<h1>my cart</h1>
@@ -79,6 +83,7 @@
 			<a href="home.php">home </a><span>/ cart</span>
 		</div>
 		<section class="products">
+			<!-- ... (winkelwageninhoud met formulier voor updates en knoppen voor verwijderen/legn) ... -->
 			<h1 class="title">products added in cart</h1>
 			<div class="box-container">
 				<?php 
@@ -134,6 +139,7 @@
 		</section>
 		<?php include 'components/footer.php'; ?>
 	</div>
+	<!-- Inclusie van SweetAlert2-bibliotheek en aangepaste scripts. -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 	<script src="script.js"></script>
 	<?php include 'components/alert.php'; ?>
