@@ -1,7 +1,8 @@
-<?php 
+<?php
+ // Inclusie van de databaseverbinding en starten van de sessie. 
 	include 'components/connection.php';
 	session_start();
-
+  // Controleren of de gebruiker is ingelogd en instellen van $user_id.
 	if (isset($_SESSION['user_id'])) {
 		$user_id = $_SESSION['user_id'];
 	}else{
@@ -9,23 +10,27 @@
 	}
 
 	//register user
+	 // Registratie van de gebruiker als het inlogformulier is ingediend.
 	if (isset($_POST['submit'])) {
-
+  // Ontvangen en filteren van de ingediende e-mail en wachtwoord.
 		$email = $_POST['email'];
 		$email = filter_var($email, FILTER_SANITIZE_STRING);
 		$pass = $_POST['pass'];
 		$pass = filter_var($pass, FILTER_SANITIZE_STRING);
+		 // Voorbereiden en uitvoeren van de databasequery om de gebruiker te selecteren.
 
 		$select_user = $conn->prepare("SELECT * FROM `users` WHERE  email = ? AND password = ?");
 		$select_user->execute([$email, $pass]);
 		$row = $select_user->fetch(PDO::FETCH_ASSOC);
-
+		 // Controleren of de gebruiker is gevonden.
 		if ($select_user->rowCount() > 0) {
+			 // Sessievariabelen instellen voor de ingelogde gebruiker en doorverwijzen naar de startpagina.
 			$_SESSION['user_id'] = $row['id'];
 			$_SESSION['user_name'] = $row['name'];
 			$_SESSION['user_email'] = $row['email'];
 			header('location: home.php');
 		}else{
+			 // Foutmelding als de gebruiker niet is gevonden.
 			$warning_msg[] = 'incorrect username or password';
 		}
 	}
@@ -42,6 +47,7 @@
 	<title>login</title>
 </head>
 <body>
+	 <!-- Hoofdcontainer voor de loginpagina. -->
 	<div class="main-container">
 		<section class="form-container">
 			<div class="title">
@@ -50,6 +56,7 @@
 				<!-- <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto dolorum deserunt minus veniam
                     tenetur
                 </p> -->
+				 <!-- Een optionele paragraaf die momenteel is uitgeschakeld. -->
 			</div>
 			<form action="" method="post">
 				<div class="input-field">

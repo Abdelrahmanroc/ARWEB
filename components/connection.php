@@ -1,11 +1,12 @@
-<?php 
-	$db_name = 'mysql:host=localhost;dbname=shop_db';
-	$db_user = 'root';
-	$db_password ='';
+<?php
+// Databaseconfiguratie 
+	$db_name = 'mysql:host=localhost;dbname=shop_db'; // Hier wordt de naam van de database opgegeven, met het type en de locatie van de database.
+	$db_user = 'root';// Gebruikersnaam voor de databaseverbinding.
+	$db_password ='';// Wachtwoord voor de databaseverbinding.
 
 	$conn = new PDO($db_name,$db_user,$db_password);
 
-	
+	// Functie voor het genereren van een unieke ID
 	function unique_id(){
 		$chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		$charLength = strlen($chars);

@@ -6,11 +6,15 @@
 	</div> -->
 </div>
 <footer>
+	<!-- Een overlay-div wordt gebruikt om een semi-transparante laag over de achtergrond toe te voegen. -->
+	<div class="overlay"></div>
 	<div class="overlay"></div>
 	<div class="footer-content">
+		<!-- Een afbeelding wordt weergegeven in een aparte doos in de voettekst. -->
 		<div class="img-box">
 			<img src="img/ddd3.png">
 		</div>
+		<!-- De inner-footer bevat verschillende secties met informatie, zoals "about us," "local," en "FOLLOW US." -->
 		<div class="inner-footer">
 			<div class="card">
 				<h3>about us</h3>
@@ -31,6 +35,7 @@
 			<div class="card">
 				<h3>FOLLOW US</h3>
 				<!-- <p>Sign Up For Newslatter</p> -->
+				<!-- Een kaart met sociale mediakoppelingen. -->
 				<div class="social-links">
 					<i class="bx bxl-instagram"></i>
 					<i class="bx bxl-twitter"></i>

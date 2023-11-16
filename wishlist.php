@@ -1,28 +1,31 @@
-<?php 
+<?php
+// Inclusie van de databaseverbinding en starten van de sessie. 
  include 'components/connection.php';
  session_start();
+ // Controleer of de gebruiker is ingelogd en stel $user_id in.
  if (isset($_SESSION['user_id'])) {
 		$user_id = $_SESSION['user_id'];
 	}else{
 		$user_id = '';
 	}
-
+	// Uitloggen als het logout-formulier is ingediend.
 	if (isset($_POST['logout'])) {
 		session_destroy();
 		header("location: login.php");
 	}
 	
-	//adding products in cart
+	// Toevoegen van producten aan de winkelwagen.
 	if (isset($_POST['add_to_cart'])) {
 		$id = unique_id();
 		$product_id = $_POST['product_id'];
 
 		$qty = 1;
 		$qty = filter_var($qty, FILTER_SANITIZE_STRING);
+		 // Controleer of het product al in de winkelwagen van de gebruiker staat.
 
 		$varify_cart = $conn->prepare("SELECT * FROM `cart` WHERE user_id = ? AND product_id = ?");
 		$varify_cart->execute([$user_id, $product_id]);
-
+		// Controleer het maximale aantal items in de winkelwagen van de gebruiker.
 		$max_cart_items = $conn->prepare("SELECT * FROM `cart` WHERE user_id = ?");
 		$max_cart_items->execute([$user_id]);
 
@@ -31,10 +34,11 @@
 		}else if ($max_cart_items->rowCount() > 20) {
 			$warning_msg[] = 'cart is full';
 		}else{
+			 // Haal de prijs van het product op.
 			$select_price = $conn->prepare("SELECT * FROM `products` WHERE id = ? LIMIT 1");
 			$select_price->execute([$product_id]);
 			$fetch_price = $select_price->fetch(PDO::FETCH_ASSOC);
-
+			 // Voeg het product toe aan de winkelwagen.
 			$insert_cart = $conn->prepare("INSERT INTO `cart`(id, user_id,product_id,price,qty) VALUES(?,?,?,?,?)");
 			$insert_cart->execute([$id, $user_id, $product_id, $fetch_price['price'], $qty]);
 			$success_msg[] = 'product added to cart successfully';
@@ -42,14 +46,16 @@
 	}
 
 	//delete item from wishlist
+	// Verwijderen van items uit de verlanglijst
 	if (isset($_POST['delete_item'])) {
 		$wishlist_id = $_POST['wishlist_id'];
 		$wishlist_id = filter_var($wishlist_id, FILTER_SANITIZE_STRING);
-
+		// Controleer of het item bestaat in de verlanglijst.
 		$varify_delete_items = $conn->prepare("SELECT * FROM `wishlist` WHERE id =?");
 		$varify_delete_items->execute([$wishlist_id]);
 
 		if ($varify_delete_items->rowCount()>0) {
+			// Verwijder het item uit de verlanglijst.
 			$delete_wishlist_id = $conn->prepare("DELETE FROM `wishlist` WHERE id = ?");
 			$delete_wishlist_id->execute([$wishlist_id]);
 			$success_msg[] = "wishlist item delete successfully";
@@ -83,21 +89,25 @@
 			<h1 class="title">products added in wishlist</h1>
 			<div class="box-container">
 				<?php 
+				// Haal de items op die zijn toegevoegd aan de verlanglijst van de gebruiker.
 					$grand_total = 0;
 					$select_wishlist = $conn->prepare("SELECT * FROM `wishlist` WHERE user_id = ?");
 					$select_wishlist->execute([$user_id]);
 					if ($select_wishlist->rowCount()>0) {
 						while($fetch_wishlist = $select_wishlist->fetch(PDO::FETCH_ASSOC)){
+							 // Haal de productgegevens op.
 							$select_products = $conn->prepare("SELECT * FROM `products` WHERE id= ?");
 							$select_products->execute([$fetch_wishlist['product_id']]);
 							if ($select_products->rowCount()> 0 ) {
 								$fetch_products = $select_products->fetch(PDO::FETCH_ASSOC)
 							
 				?>
+				<!-- Formulier voor elk item in de verlanglijst. -->
 				<form method="post" action="" class="box">
 					<input type="hidden" name="wishlist_id" value="<?=$fetch_wishlist['id']; ?>">
 					<img src="image/<?=$fetch_products['image']; ?>">
 					<div class="button">
+						 <!-- Knoppen voor toevoegen aan winkelwagen, bekijken en verwijderen uit verlanglijst. -->
 						<button type="submit" name="add_to_cart"><i class="bx bx-cart"></i></button>
 						<a href="view_page.php?pid=<?php echo $fetch_products['id']; ?>" class="bx bxs-show"></a>
 						<button type="submit" name="delete_item" onclick="return confirm('delete this item');"><i class="bx bx-x"></i></button>
@@ -107,6 +117,7 @@
 					<div class="flex">
 						<p class="price">price $<?=$fetch_products['price']; ?>/-</p>
 					</div>
+					 <!-- Knop om het product onmiddellijk te kopen. -->
 					<a href="checkout.php?get_id=<?=$fetch_products['id']; ?>" class="btn">buy now</a>
 				</form>
 				<?php 

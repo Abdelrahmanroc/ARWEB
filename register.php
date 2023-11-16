@@ -1,6 +1,8 @@
 <?php 
 	include 'components/connection.php';
+	// Inclusie van de databaseverbinding en starten van de sessie.
 	session_start();
+	// Controleer of de gebruiker is ingelogd en stel $user_id in.
 
 	if (isset($_SESSION['user_id'])) {
 		$user_id = $_SESSION['user_id'];
@@ -9,8 +11,11 @@
 	}
 
 	//register user
+	// Registratie van de gebruiker als het registratieformulier is ingediend.
 	if (isset($_POST['submit'])) {
+		// Genereren van een unieke gebruikers-ID.
 		$id = unique_id();
+		  // Ophalen van ingevoerde gegevens en filteren.
 		$name = $_POST['name'];
 		$name = filter_var($name, FILTER_SANITIZE_STRING);
 		$email = $_POST['email'];
@@ -19,24 +24,29 @@
 		$pass = filter_var($pass, FILTER_SANITIZE_STRING);
 		$cpass = $_POST['cpass'];
 		$cpass = filter_var($cpass, FILTER_SANITIZE_STRING);
-
+		 // Controleren of het opgegeven e-mailadres al bestaat in de database.
 		$select_user = $conn->prepare("SELECT * FROM `users` WHERE  email = ?");
 		$select_user->execute([$email]);
 		$row = $select_user->fetch(PDO::FETCH_ASSOC);
-
+		  // Als het e-mailadres al bestaat, toon een waarschuwingsbericht.	
 		if ($select_user->rowCount() > 0) {
 			$warning_msg[] = 'email already exist';
 		}else{
+			 // Als de wachtwoorden overeenkomen, voeg de gebruiker toe aan de database.
 			if($pass != $cpass){
 				$warning_msg[] = 'confirm your password';
 				
 			}else{
+				 // Voorbereiden en uitvoeren van de databasequery om de gebruiker toe te voegen.
 				$insert_user = $conn->prepare("INSERT INTO `users`(id,name,email,password) VALUES(?,?,?,?)");
 				$insert_user->execute([$id,$name,$email,$pass]);
+				// Doorsturen naar de homepagina na registratie.
 				header('location: home.php');
+				 // Opnieuw inloggen van de geregistreerde gebruiker.
 				$select_user = $conn->prepare("SELECT * FROM `users` WHERE email = ? AND password = ?");
 				$select_user->execute([$email, $pass]);
 				$row = $select_user->fetch(PDO::FETCH_ASSOC);
+				// Als de gebruiker is gevonden, stel de sessievariabelen in.
 				if ($select_user->rowCount() > 0) {
 					$_SESSION['user_id'] = $row['id'];
 					$_SESSION['user_name'] = $row['name'];
@@ -47,6 +57,7 @@
 	}
 
 ?>
+<!-- Inclusie van de stijlinstellingen. -->
 <style type="text/css">
 	<?php include 'style.css'; ?>
 </style>
@@ -58,6 +69,7 @@
 	<title>register</title>
 </head>
 <body>
+	    <!-- Hoofdcontainer van de pagina. -->
 	<div class="main-container">
 		<section class="form-container">
 			<div class="title">
@@ -86,6 +98,7 @@
 				</div>
 				<input type="submit" name="submit" value="register now" class="btn">
 				<p>already have an account? <a href="login.php">login now</a></p>
+				  <!-- Knop om het registratieformulier in te dienen. -->
 			</form>
 		</section>
 	</div>
